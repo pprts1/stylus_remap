@@ -1,4 +1,10 @@
-My solution to redefine a stylus button as the key-combination 'control+z'Problem:If you possess a drawing tablet+stylus of an unknown or lesser known brand then there is a chance that there is no direct way in your linux distribution and/or environment to change the button behaviour of your stylus. Usually if the stylus is recognized the system maps several buttons to the stylus automatically and recognises it as a normal mouse. Mapped Buttons range from button '1 to X', e.g. if the stylus is recognised as having 7 buttons then the button map looks like this: 1 2 3 4 5 6 7 - the actual buttons are 1 2 3, buttons 4-7 are reserved for the mouse wheel. Since the stylus doesn't come with a mouse wheel these buttons should be ignored.This was also the case for my 'UC-Logic Technology Corp. TABLET 1060N' stylus.In this approach I combined several programs and wrote two small scripts and made them work together.The programs that I used are and that have to be installed for this tutorial to work are (they are probably installed already in your system): xinput, xbindkeys, xdotool
+My solution to redefine a stylus button as the key-combination 'control+z'Problem:
+If you possess a drawing tablet+stylus of an unknown or lesser known brand then there is a chance that there is no direct way in your linux distribution and/or environment to change the button behaviour of your stylus. Usually if the stylus is recognized the system maps several buttons to the stylus automatically and recognises it as a normal mouse. Mapped Buttons range from button '1 to X', e.g. if the stylus is recognised as having 7 buttons then the button map looks like this:
+
+1 2 3 4 5 6 7
+
+the actual buttons are 1 2 3, buttons 4-7 are reserved for the mouse wheel. Since the stylus doesn't come with a mouse wheel these buttons should be ignored.This was also the case for my 'UC-Logic Technology Corp. TABLET 1060N' stylus.In this approach I combined several programs and wrote two small scripts and made them work together.The programs that I used are and that have to be installed for this tutorial to work are (they are probably installed already in your system):
+xinput, xbindkeys, xdotool
 
 Using 'xinput' I remapped the buttons on my stylus, but instead of just changing the order of the buttons (e.g. '1 2 3 4 5 6 7' to '1 2 7 4 5 6 3') I introduced a new button ('50') that came neither defined for my stylus nor my mouse, and this button is then only defined for the stylus. So my stylus button map looked like this afterwards: 1 2 50 4 5 6 7, therefore redefining button 3 on my stylus as button 50. Button three on a mouse would be recognised as a right-click for example.
 
@@ -18,7 +24,11 @@ xinput map-to-output pointer:"UC-Logic TABLET 1060N Consumer Control" eDP-1-1
 
 xinput map-to-output pointer:"UC-Logic TABLET 1060N Pad" eDP-1-1
 
+# instead of "pointer:"DEVICE_NAME" one can also use the ID from the "xinput list" command. this ID may change every time you replug the device. 
+
 Since this is undone every time you logout/restart your computer I wrote a script 'xinput.sh' which I manually start after every login/restart:
+
+
 
 #! /bin/bash
 
@@ -29,6 +39,8 @@ xinput map-to-output pointer:"UC-Logic TABLET 1060N Pen Pen (0)" eDP-1-1
 xinput map-to-output pointer:"UC-Logic TABLET 1060N Consumer Control" eDP-1-1
 
 xinput map-to-output pointer:"UC-Logic TABLET 1060N Pad" eDP-1-1
+
+
 
 The first command sets the button map of my stylus and introduces the button '50' instead of mouse button '3' - you could also instead of '50' chose '100' or '150', just make sure your normal mouse doesn't have this button mapped to it with:
 
@@ -48,9 +60,11 @@ Then edit this .xbindkeysrc file in your home directory in the style demanded in
 
 "xdotool.sh"
 
-b:50 + Release
+ b:50 + Release
 
-NOTE: before 'b:50' is a BLANK!
+# NOTE: before 'b:50' is a BLANK!
+
+
 
 3) The script launches xdotool to return a key combination (in this case: 'left-control + z' to 'undo' the last thing I did in my drawing application, e.g. removing a pen stroke on the canvas in GIMP)
 
